@@ -76,5 +76,14 @@ Directory get dataHome => _getDir(XDGDir.dataHome);
 Directory get configHome => _getDir(XDGDir.configHome);
 Directory get stateHome => _getDir(XDGDir.stateHome);
 Directory get runtimeDir => _getDir(XDGDir.runtimeDir);
-List<Directory> get dataDirs => XDGDir.dataDirs.getEnvName().split(":").map(Directory.new).toList();
-List<Directory> get configDirs => XDGDir.configDirs.getEnvName().split(":").map(Directory.new).toList();
+
+List<Directory> _getDirs(XDGDir xdg) {
+  final env = Platform.environment[XDGDir.dataDirs.getEnvName()];
+  if (env == null || env.isEmpty) {
+    return [];
+  }
+  return env.split(":").map(Directory.new).toList();
+}
+
+List<Directory> get dataDirs => _getDirs(XDGDir.dataDirs);
+List<Directory> get configDirs => _getDirs(XDGDir.configDirs);
